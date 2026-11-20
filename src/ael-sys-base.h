@@ -1,6 +1,8 @@
 #ifndef AEL_SYS_BASE_H_
 #define AEL_SYS_BASE_H_
 
+#include <stdint.h>
+
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -20,6 +22,10 @@ typedef u8 ael_sys_bool;
 
 #define AEL_SYS_TRUE ((u8)1)
 #define AEL_SYS_FALSE ((u8)0)
+
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
 
 // fat pointer
 // if len=0, raw=NULL
@@ -74,5 +80,15 @@ typedef struct ael_sys_sexp {
         ael_sys_str str, sym, key; // sexpStr, sexpSym, sexpKey
     };
 } ael_sys_sexp;
+
+typedef struct ael_sys_alloc {
+    void *(*alloc)(struct ael_sys_alloc*, usize bytes);
+    void (*free)(struct ael_sys_alloc*, void *ptr);
+} ael_sys_alloc;
+
+typedef struct ael_sys_stream_u8 {
+    u8 (*next)(struct ael_sys_stream_u8*);
+    ael_sys_bool (*has_next)(struct ael_sys_stream_u8*);
+} ael_sys_stream_u8;
 
 #endif
